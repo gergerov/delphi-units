@@ -23,7 +23,6 @@ type
     public
       FTreeView: TTreeView;
       FDataSet: TDataSet;
-      constructor Create(DataSet: TDataSet; TreeView: TTreeView);
       procedure Draw(DataSet: TDataSet; TreeView: TTreeView);
     private
       arrTreeViewData: array of TTreeViewData;
@@ -34,12 +33,6 @@ type
   end;
 
 implementation
-
-  constructor TTreeViewBuilder.Create(DataSet: TDataSet; TreeView: TTreeView);
-    begin
-      FTreeView := TreeView;
-      FDataSet := DataSet;
-    end;
 
   procedure TTreeViewBuilder.Draw(DataSet: TDataSet; TreeView: TTreeView);
     begin
@@ -52,8 +45,9 @@ implementation
       i: integer;
       TreeViewData: TTreeViewData;
     begin
-      arrTreeViewData := [];
-      for i := 0 to FDataSet.RecordCount - 1 do
+//      DataSet.Active := False;
+//      DataSet.Active := True;
+      for i := 0 to DataSet.RecordCount - 1 do
         begin
           TreeViewData := TTreeViewData.Create;
 
@@ -64,7 +58,7 @@ implementation
 
           SetLength(arrTreeViewData, Length(arrTreeViewData) + 1);
           arrTreeViewData[Length(arrTreeViewData) - 1] := TreeViewData;
-          FDataSet.Next;
+          DataSet.Next;
         end;
     end;
 
@@ -80,7 +74,6 @@ implementation
               TreeViewItem := TTreeViewItem.Create(FTreeView);
               TreeViewItem.Text := arrTreeViewData[i].CAPTION;
               TreeViewItem.Parent := TreeView;
-              TreeViewItem.Data := pointer(arrTreeViewData[i]);
               DrawBranch(arrTreeViewData[i].ID, TreeViewItem);
             end;
         end;

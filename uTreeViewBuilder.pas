@@ -21,8 +21,6 @@ type
 type
   TTreeViewBuilder = class(TObject)
     public
-      FTreeView: TTreeView;
-      FDataSet: TDataSet;
       procedure Draw(DataSet: TDataSet; TreeView: TTreeView);
     private
       arrTreeViewData: array of TTreeViewData;
@@ -38,6 +36,7 @@ implementation
     begin
       SetArrayTreeViewDataFromDataSet(DataSet);
       DrawRoot(TreeView);
+      TreeView.Data := pointer(self);
     end;
 
   procedure TTreeViewBuilder.SetArrayTreeViewDataFromDataSet(DataSet: TDataSet);
@@ -45,8 +44,6 @@ implementation
       i: integer;
       TreeViewData: TTreeViewData;
     begin
-      DataSet.Active := False;
-      DataSet.Active := True;
       for i := 0 to DataSet.RecordCount - 1 do
         begin
           TreeViewData := TTreeViewData.Create;
@@ -71,7 +68,8 @@ implementation
         begin
           if arrTreeViewData[i].PARENT_ID = 0 then
             begin
-              TreeViewItem := TTreeViewItem.Create(FTreeView);
+              TreeViewItem := TTreeViewItem.Create(TreeView);
+              TreeViewItem.Data := Pointer(arrTreeViewData[i]);
               TreeViewItem.Text := arrTreeViewData[i].CAPTION;
               TreeViewItem.Parent := TreeView;
               DrawBranch(arrTreeViewData[i].ID, TreeViewItem);
@@ -88,7 +86,8 @@ implementation
       ChildrenArray := GetChildrenArray(PARENT_ID);
       for i := 0 to length(ChildrenArray) - 1 do
         begin
-          Branch := TTreeViewItem.Create(NIL);
+          Branch := TTreeViewItem.Create(TreeViewItem);
+          Branch.Data := Pointer(ChildrenArray[i]);
           Branch.Text := ChildrenArray[i].CAPTION;
           TreeViewItem.AddObject(Branch);
           DrawBranch(ChildrenArray[i].ID, Branch);

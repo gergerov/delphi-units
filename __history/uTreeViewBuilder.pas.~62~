@@ -45,9 +45,6 @@ implementation
       i: integer;
       TreeViewData: TTreeViewData;
     begin
-      DataSet.Active := False;
-      DataSet.Active := True;
-//      arrTreeViewData := [];
       for i := 0 to DataSet.RecordCount - 1 do
         begin
           TreeViewData := TTreeViewData.Create;
@@ -75,7 +72,6 @@ implementation
               TreeViewItem := TTreeViewItem.Create(FTreeView);
               TreeViewItem.Text := arrTreeViewData[i].CAPTION;
               TreeViewItem.Parent := TreeView;
-//              TreeViewItem.Data := pointer(arrTreeViewData[i]);
               DrawBranch(arrTreeViewData[i].ID, TreeViewItem);
             end;
         end;
@@ -93,6 +89,7 @@ implementation
           Branch := TTreeViewItem.Create(NIL);
           Branch.Text := ChildrenArray[i].CAPTION;
           TreeViewItem.AddObject(Branch);
+          Branch.data := Pointer(ChildrenArray[i]);
           DrawBranch(ChildrenArray[i].ID, Branch);
         end;
     end;
