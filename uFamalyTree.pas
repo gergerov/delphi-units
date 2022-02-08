@@ -1,4 +1,4 @@
-unit uFamalyTree;
+﻿unit uFamalyTree;
 
 interface
 uses
@@ -11,18 +11,13 @@ procedure get_parent_class_info(cls: TClass; strings: TStrings; lvl: integer);
 procedure draw_info(cls: TClass);
 function get_class_info(cls: TClass): string;
 
-implementation uses TypInfo;
+implementation
 
 procedure get_parent_class_info(cls: TClass; strings: TStrings; lvl: integer);
-  var
-    ClassTypeInfo: PTypeInfo;
-    ClassTypeData: PTypeData;
   begin
     if cls = TObject then
       exit;
     lvl := lvl + 1;
-    ClassTypeInfo := cls.ClassParent.ClassInfo;
-    ClassTypeData := GetTypeData(ClassTypeInfo);
 
     strings.Append(
       IntToStr(lvl)
@@ -30,7 +25,7 @@ procedure get_parent_class_info(cls: TClass; strings: TStrings; lvl: integer);
       + cls.ClassParent.ClassName
       + ' '
       + '('
-      + Format('%s', [ClassTypeData.UnitName])
+      + cls.ClassParent.UnitName + ':' + cls.ClassParent.UnitScope
       + ')'
     );
     get_parent_class_info(cls.ClassParent, strings, lvl);
@@ -38,16 +33,12 @@ procedure get_parent_class_info(cls: TClass; strings: TStrings; lvl: integer);
 
 function get_class_info(cls: TClass): string;
   var
-    ClassTypeInfo: PTypeInfo;
-    ClassTypeData: PTypeData;
     str: string;
   begin
-    ClassTypeInfo := cls.ClassInfo;
-    ClassTypeData := GetTypeData(ClassTypeInfo);
     str := str + cls.ClassName;
     str := str + ' ';
     str := str + '(';
-    str := str + Format('%s', [ClassTypeData.UnitName]);
+    str := str + cls.UnitName + ':' + cls.UnitScope;
     str := str + ')';
     result := str;
   end;
