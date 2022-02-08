@@ -40,7 +40,7 @@ procedure TADOConnectionSetup.SetSectionSelector(SectionSelector: TStrings);
   begin
     SetIniFile;
     FiniFile.ReadSections(SectionSelector);
-    ShowMessage(SectionSelector.UnitScope);
+//    ShowMessage(SectionSelector.UnitScope);
   end;
 
 function TADOConnectionSetup.GetConnectionString(SelectedSection: string): string;
