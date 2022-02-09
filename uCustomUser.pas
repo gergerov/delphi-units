@@ -70,9 +70,7 @@ procedure TADOCustomUser.setAuth(Value: boolean);
         FPassword := '';
         FUsername := '';
         FID := 0;
-//        FConnection.Destroy;
         Fconnection := Nil;
-        FAuthStatus := Value;
       end
     else
       begin
@@ -81,6 +79,7 @@ procedure TADOCustomUser.setAuth(Value: boolean);
         FConnection.ConnectionTimeout := 5;
         FConnection.ConnectionString := FConnectionString;
         FConnection.Connected := True;
+        FConnection.DefaultDatabase := 'CTM';
       end;
 
     FAuthStatus := Value;
